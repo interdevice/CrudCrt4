@@ -1,0 +1,78 @@
+﻿@model CrudCrt4.Models.Conteudo
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+    @{
+        ViewData["Title"] = "Edit";
+    }
+
+<script src="~/js/ckeditor/ckeditor.js"></script>
+
+<h1>Editar</h1>
+@if (SignInManager.IsSignedIn(User))
+{
+    <h4>Conteúdo</h4>
+    <hr />
+    <div class="row conteudo">
+        <div class="col-md-12">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="Menu" class="control-label"></label>
+                    <input asp-for="Menu" class="form-control" />
+                    <span asp-validation-for="Menu" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Titulo" class="control-label"></label>
+                    <input asp-for="Titulo" class="form-control" />
+                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                </div>
+                <div class="form-group editor">
+                    <label asp-for="Artigo" class="control-label"></label>
+                    @Html.TextAreaFor(m => m.Artigo, new
+                   {
+                       rows = "20",
+                       style = "resize:none;width:400px;",
+                       placeholder = Html.DisplayNameFor(m => m.Artigo),
+                       @class = "form-control input-lg textarea-editor",
+                       @id = "fulltext"
+                   })
+                   <script>CKEDITOR.replace("fulltext", {
+                        extraPlugins: 'ckeditorfa',
+                        contentsCss: '/ckeditor/plugins/fontawesome/css/fontawesome.min.css',
+                        allowedContent: true
+                        
+                    });</script>
+                    <span asp-validation-for="Artigo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Imagem" class="control-label"></label>
+                    <input asp-for="Imagem" class="form-control" />
+                    <span asp-validation-for="Imagem" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Upload" class="control-label"></label>
+                    <input asp-for="Upload" class="form-control" />
+                    <span asp-validation-for="Upload" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+}
+else
+{
+    <p> Você Não tem Acesso a Está Página</p>
+}
