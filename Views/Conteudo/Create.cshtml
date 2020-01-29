@@ -1,4 +1,5 @@
-﻿@model CrudCrt4.Models.Conteudo
+﻿@model CrudCrt4.Views.ViewModels.CreateConteudoViewModel
+
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
@@ -18,45 +19,76 @@
         <div class="col-md-12">
             <form asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Menu" class="control-label"></label>
-                    <input asp-for="Menu" class="form-control" />
-                    <span asp-validation-for="Menu" class="text-danger"></span>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Menu" class="control-label"></label>
+                            <input asp-for="Menu" class="form-control" />
+                            <span asp-validation-for="Menu" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Titulo" class="control-label"></label>
+                            <input asp-for="Titulo" class="form-control" />
+                            <span asp-validation-for="Titulo" class="text-danger"></span>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Titulo" class="control-label"></label>
-                    <input asp-for="Titulo" class="form-control" />
-                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group editor">
+                            <label asp-for="Artigo" class="control-label"></label>
+                            @Html.TextAreaFor(m => m.Artigo, new
+                           {
+                               rows = "20",
+                               style = "resize:none;width:400px;",
+                               placeholder = Html.DisplayNameFor(m => m.Artigo),
+                               @class = "form-control input-lg textarea-editor",
+                               @id = "fulltext"
+                           })
+                            <script>
+                                CKEDITOR.replace("fulltext", {
+                                    extraPlugins: 'ckeditorfa',
+                                    contentsCss: '/ckeditor/plugins/fontawesome/css/fontawesome.min.css',
+                                    allowedContent: true
+
+                                });</script>
+                            <span asp-validation-for="Artigo" class="text-danger"></span>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group editor">
-                    <label asp-for="Artigo" class="control-label"></label>
-                   @Html.TextAreaFor(m => m.Artigo, new
-                   {
-                       rows = "20",
-                       style = "resize:none;width:400px;",
-                       placeholder = Html.DisplayNameFor(m => m.Artigo),
-                       @class = "form-control input-lg textarea-editor",
-                       @id = "fulltext"
-                   })
-                   <script>CKEDITOR.replace("fulltext", {
-                        extraPlugins: 'ckeditorfa',
-                        contentsCss: '/ckeditor/plugins/fontawesome/css/fontawesome.min.css',
-                        allowedContent: true
-                    });</script>
-                    <span asp-validation-for="Artigo" class="text-danger"></span>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Imagem" class="control-label"></label>
+                            <input asp-for="Imagem" class="form-control" />
+                            <span asp-validation-for="Imagem" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <label asp-for="Upload" class="control-label"></label>
+                                <label class="custom-file-label" for="validatedCustomFile" style="margin-top:32px"></label>
+                                <input type="file" asp-for="Upload" value="" class="custom-file-input" id="validatedCustomFile" name="receipt" required>
+                                <span asp-validation-for="Upload" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Imagem" class="control-label"></label>
-                    <input asp-for="Imagem" class="form-control" />
-                    <span asp-validation-for="Imagem" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Upload" class="control-label"></label>
-                    <input asp-for="Upload" class="form-control" />
-                    <span asp-validation-for="Upload" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+
+                <hr class="mt-3 mb-3">
+
+                <div class="row">
+                    <div class="col-12 col-md-6">
+
+                        <button type="submit" class="btn btn-primary">
+                            Criar
+                        </button>
+
+                    </div>
                 </div>
             </form>
         </div>
@@ -72,5 +104,5 @@
 }
 else
 {
-    <p> Você Não tem Acesso a Está Página</p>
+    <p> Você Não tem Acesso a Esta Página</p>
 }

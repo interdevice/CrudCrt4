@@ -8,16 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using CrudCrt4.Data;
 using CrudCrt4.Models;
 using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Hosting;
+using CrudCrt4.Views.ViewModels;
 
 namespace CrudCrt4.Controllers
 {
     public class ConteudoController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IWebHostEnvironment _env;
 
-        public ConteudoController(ApplicationDbContext context)
+        public ConteudoController(
+            ApplicationDbContext context,
+            SignInManager<IdentityUser> signInManager,
+            IWebHostEnvironment env)
         {
             _context = context;
+            _signInManager = signInManager;
+            _env = env;
         }
 
         // GET: Conteudo
@@ -65,7 +76,7 @@ namespace CrudCrt4.Controllers
         // GET: Conteudo/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new CreateConteudoViewModel());
         }
 
         // POST: Conteudo/Create
@@ -74,16 +85,43 @@ namespace CrudCrt4.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         
-        public async Task<IActionResult> Create([Bind("Id,Menu,Titulo,Artigo,Imagem,Upload")] Conteudo conteudo)
+        public async Task<IActionResult> Create(CreateConteudoViewModel conteudo)
         {
-            if (ModelState.IsValid)
+            if (_signInManager.IsSignedIn(User))
             {
-                _context.Add(conteudo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    IFormFile file = null;
+                    if (Request.Form.Files.Count > 0)
+                    {
+                        file = Request.Form.Files[0];
+                        var uniqueFileName = GetUniqueFileName(file.FileName);
+                        var uploads = Path.Combine(_env.WebRootPath, "Upload/imagens");
+                        var filePath = Path.Combine(uploads, uniqueFileName);
+                        file.CopyTo(new FileStream(filePath, FileMode.Create));
+                        conteudo.Upload = uniqueFileName;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Upload", "Por favor, anexe um arquivo.");
+                        return View(conteudo);
+                    }
+
+                    var model = new Conteudo(
+                        conteudo.Menu,
+                        conteudo.Titulo,
+                        conteudo.Artigo,
+                        conteudo.Imagem,
+                        conteudo.Upload);
+
+                    _context.Add(model);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(conteudo);
             }
 
-            return View(conteudo);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Conteudo/Edit/5
@@ -99,7 +137,19 @@ namespace CrudCrt4.Controllers
             {
                 return NotFound();
             }
-            return View(conteudo);
+
+            var model = new EditConteudoViewModel(
+                conteudo.Id,
+                conteudo.Menu,
+                conteudo.Titulo,
+                conteudo.Artigo,
+                conteudo.Imagem,
+                conteudo.Upload);
+
+            //var uploads = Path.Combine(_env.WebRootPath, "Upload");
+            //model.FullUploadPath = Path.Combine(uploads, model.Upload);
+
+            return View(model);
         }
 
         // POST: Conteudo/Edit/5
@@ -107,34 +157,59 @@ namespace CrudCrt4.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Menu,Titulo,Artigo,Imagem,Upload")] Conteudo conteudo)
+        public async Task<IActionResult> Edit(int id, EditConteudoViewModel conteudo)
         {
             if (id != conteudo.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (_signInManager.IsSignedIn(User))
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(conteudo);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ConteudoExists(conteudo.Id))
+                    IFormFile file = null;
+                    if (Request.Form.Files.Count > 0)
                     {
-                        return NotFound();
+                        file = Request.Form.Files[0];
+                        var uniqueFileName = GetUniqueFileName(file.FileName);
+                        var uploads = Path.Combine(_env.WebRootPath, "Upload");
+                        var filePath = Path.Combine(uploads, uniqueFileName);
+                        file.CopyTo(new FileStream(filePath, FileMode.Create));
+                        conteudo.Upload = uniqueFileName;
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError("Upload", "Por favor, anexe um arquivo.");
+                        return View(conteudo);
                     }
+                    try
+                    {
+                        var model = new Conteudo(
+                            conteudo.Menu,
+                            conteudo.Titulo,
+                            conteudo.Artigo,
+                            conteudo.Imagem,
+                            conteudo.Upload);
+                        _context.Update(model);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!ConteudoExists(conteudo.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(conteudo);
             }
-            return View(conteudo);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Conteudo/Delete/5
@@ -169,6 +244,15 @@ namespace CrudCrt4.Controllers
         private bool ConteudoExists(int id)
         {
             return _context.Conteudo.Any(e => e.Id == id);
+        }
+
+        private string GetUniqueFileName(string fileName)
+        {
+            fileName = Path.GetFileName(fileName);
+            return Path.GetFileNameWithoutExtension(fileName)
+                      + "_"
+                      + Guid.NewGuid().ToString().Substring(0, 4)
+                      + Path.GetExtension(fileName);
         }
     }
 }

@@ -72,12 +72,12 @@ body {
 
 /*Customizações*/
 
-.conteudo .form-group {
+/*.conteudo .form-group {
     width: 40%;
     float: left;
     margin-right: 50px;
-}
+}*/
 
 .conteudo .form-group.editor {
-    width: 85%;
+    width: 100%;
 }

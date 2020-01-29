@@ -13,5 +13,19 @@ namespace CrudCrt4.Models
         public string Artigo { get; set; }
         public string Imagem { get; set; }
         public string Upload { get; set; }
+
+        public Conteudo()
+        {
+
+        }
+        
+        public Conteudo(string menu, string titulo, string artigo, string imagem, string upload)
+        {
+            Menu = menu;
+            Titulo = titulo;
+            Artigo = artigo;
+            Imagem = imagem;
+            Upload = upload;
+        }
     }
 }
