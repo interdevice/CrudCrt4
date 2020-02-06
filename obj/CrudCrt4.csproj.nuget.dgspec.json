@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Eduardo\\Documents\\trabalhos\\mvc-react\\CrudCrt4\\CrudCrt4.csproj": {}
+    "C:\\Users\\luizh\\source\\repos\\CrudCrt4-Atualizado-Publish\\CrudCrt4.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Eduardo\\Documents\\trabalhos\\mvc-react\\CrudCrt4\\CrudCrt4.csproj": {
+    "C:\\Users\\luizh\\source\\repos\\CrudCrt4-Atualizado-Publish\\CrudCrt4.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Eduardo\\Documents\\trabalhos\\mvc-react\\CrudCrt4\\CrudCrt4.csproj",
+        "projectUniqueName": "C:\\Users\\luizh\\source\\repos\\CrudCrt4-Atualizado-Publish\\CrudCrt4.csproj",
         "projectName": "CrudCrt4",
-        "projectPath": "C:\\Users\\Eduardo\\Documents\\trabalhos\\mvc-react\\CrudCrt4\\CrudCrt4.csproj",
-        "packagesPath": "C:\\Users\\Eduardo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Eduardo\\Documents\\trabalhos\\mvc-react\\CrudCrt4\\obj\\",
+        "projectPath": "C:\\Users\\luizh\\source\\repos\\CrudCrt4-Atualizado-Publish\\CrudCrt4.csproj",
+        "packagesPath": "C:\\Users\\luizh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\luizh\\source\\repos\\CrudCrt4-Atualizado-Publish\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Eduardo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\luizh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

@@ -73,7 +73,7 @@
                             <div class="custom-file">
                                 <label asp-for="Upload" class="control-label"></label>
                                 <label class="custom-file-label" for="validatedCustomFile" style="margin-top:32px;">@Html.ValueFor(x => x.Upload)</label>
-                                <input type="file" class="custom-file-input" id="validatedCustomFile" name="receipt" required>
+                                <input type="file" class="custom-file-input" id="validatedCustomFile" name="receipt">
                                 @Html.ValidationMessageFor(x => x.Upload)
                                 @if (!string.IsNullOrEmpty(Model.Upload))
                                 {
